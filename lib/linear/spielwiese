@@ -1,0 +1,6 @@
+require './bb_parser'
+BbParser.parse_tokens '[b="a"]hallo[/b]'
+tree = BbParser.build_tree
+BbParser.tree_to_html tree
+
+<fieldset><legend>WaiNoX</legend><blockquote>Man kann sogar den Namen des zitierten angeben</blockquote></fieldset>
