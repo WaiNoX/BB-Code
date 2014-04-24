@@ -81,7 +81,7 @@ end
 class ImgTag
   def self.parse_to_html(tag, childtext)
     if(tag.get_data.nil? ) #originalgröße
-      return '<img src="'+URI.escape(childtext)+'" alt="'+CGI.escapeHTML(childtext)+'"/>'
+      return '<img src="'+URI.escape(childtext)+'"/>'
     elsif(tag.get_data=~/\A[0-9]+x[0-9]+\z/i) # größenangabe in pixeln
       data = tag.get_data.match(/\A([0-9]+)x([0-9]+)\z/)
       width = data[1]
