@@ -9,19 +9,29 @@ class TagParser
   # 4: "parameter"
   # 5: parameter
   
-  @@matcher = /\A\[(\/?)([a-z*]+)(?:=(?:(?:'([^"'\[]+)')|(?:"([^"'\[]+)")|(?:([^"'\[]+))))?\]\z/ix
+  @@tag_matcher = /\A\[(\/?)([a-z*]+)(?:=(?:(?:'([^"'\[]+)')|(?:"([^"'\[]+)")|(?:([^"'\[]+))))?\]\z/ix
+  @@url_matcher = /\A((?:[a-z]+:\/\/|www.)[^<\s]+\.[^<\s]+)\z/ix
     
   def self.is_valid_name(tag_name)
     tag_symbol = tag_name.to_sym
     return !(TagTypes.get_info(tag_symbol).nil?)
   end
   
+  def self.is_allowed_master(tag_name)
+    tag_symbol = tag_name.to_sym
+    return is_valid_name(tag_name) && TagTypes.get_info(tag_symbol)[:allowed_in_all]
+  end
+  
   def self.is_tag(tag)
-    return !tag.match(@@matcher).nil?
+    return !tag.match(@@tag_matcher).nil?
+  end
+  
+  def self.is_url(url)
+    return !url.match(@@url_matcher).nil?
   end
   
   def initialize(tag)
-    data = tag.match(@@matcher)
+    data = tag.match(@@tag_matcher)
     @original = tag
     @closing = data[1] == '/'
     @tag_name = data[2]

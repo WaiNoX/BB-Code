@@ -9,8 +9,8 @@ require 'pry'                     #debug
 class BbParser
   
   #@@regex_woltlab = /\[(?:\/(?:[a-z]+)|(?:[a-z]+)(?:=(?:\'[^\'\\]*(?:\\.[^\'\\]*)*\'|[^,\]]*)(?:,(?:\'[^\'\\]*(?:\\.[^\'\\]*)*\'|[^,\]]*))*)?)\]/ix
-  @@tokenizer = /(\[\/?[a-z*]+(?:=(?:(?:'[^"'\[]+')|(?:"[^"'\[]+")|(?:[^"'\[]+)))?\])/ix
-  #@@url = /(?:\A|\s)((?:[a-z]+:\/\/|www.)[^<\s]+\.[^<\s]+)/ix
+  #@@tokenizer = /(\[\/?[a-z*]+(?:=(?:(?:'[^"'\[]+')|(?:"[^"'\[]+")|(?:[^"'\[]+)))?\])/ix # ohne autolink
+  @@tokenizer = /(?:(\[\/?[a-z*]+(?:=(?:(?:'[^"'\[]+')|(?:"[^"'\[]+")|(?:[^"'\[]+)))?\])|(\A|\s)((?:[a-z]+:\/\/|www.)[^<\s]+\.[^<\s]+))/ix #mit autolink
   
   def self.bb_to_html(text)
     text_array = parse_tokens(text)
@@ -36,14 +36,14 @@ class BbParser
         if(tag.closing? && parent_node.get_type == :master) #wenn kein offener tag mehr da -> text
           node = Node.new(item, :text, parent_node)
           parent_node.add_child(node)
-        elsif(tag.closing? && parent_node.get_tag.name == tag.name) #wenn der schließende tag passt eine ebene nach oben
+        elsif(tag.closing? && parent_node.get_tag.name.downcase == tag.name.downcase) #wenn der schließende tag passt eine ebene nach oben
           parent_node = parent_node.get_parent
         elsif((not tag.closing?)) #wenn sich ein neuer gültiger tag öffnet hinzufügen und runter
-          if (parent_node.get_type == :master && TagParser.is_valid_name(tag.tag_name)) #ein tag ist gültig wenn er in @@tags steht und in :master eingehängt werden soll
+          if (parent_node.get_type == :master && TagParser.is_allowed_master(tag.tag_name)) #ein tag ist gültig wenn er in @@tags steht und in :master eingehängt werden soll
             node = Node.new(item, :tag, parent_node)
             parent_node.add_child(node)
             parent_node = node
-          elsif((!parent_node.get_tag.nil?) && parent_node.get_tag.allows?(tag.tag_name)) # oder wenn der elternknoten ihn erlaubt
+          elsif((!parent_node.get_tag.nil?) && parent_node.get_tag.allows?(tag.tag_name)) # oder wenn sie sich gegenseitig tollerieren
             node = Node.new(item, :tag, parent_node)
             parent_node.add_child(node)
             parent_node = node
@@ -55,6 +55,16 @@ class BbParser
           node = Node.new(item, :text, parent_node)
           parent_node.add_child(node)
         end
+      elsif(TagParser.is_url(item)) #autourl darf nicht einfach nen url tag ausspucken, da es eventuell in einem img/url tag benutzt wird
+        if((!parent_node.get_tag.nil?) && parent_node.get_tag.allows?('url')) # wenn parent_tag erlaubt baue einen url tag zum anhängen
+          url = '<a href="' + item + '">' + item + '</a>'
+          node = Node.new(url, :url, parent_node)
+          parent_node.add_child(node)
+        else #anernfalls ist es nur text
+          node = Node.new(item, :text, parent_node)
+          parent_node.add_child(node)
+        end
+        
       else #text
         node = Node.new(item, :text, parent_node)
         parent_node.add_child(node)
@@ -65,7 +75,9 @@ class BbParser
   
   def self.tree_to_html(node)
     if(node.get_type == :text) #returne den für html escapten string, texte haben keine unterknoten
-      return  CGI.escapeHTML(node.get_text)#.gsub(@@url, '<a href="\1">\1</a>')
+      return  CGI.escapeHTML(node.get_text)
+    elsif(node.get_type == :url) #returne den unescapten string, url haben keine unterknoten
+      return node.get_text
     elsif (node.get_type == :master) #returne die erstellten texte aller unterknoten
       childtext = ''
       node.get_childs.each{|childnode|
