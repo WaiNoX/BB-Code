@@ -1,4 +1,4 @@
-require 'bb_code/tag_parser.rb'
+require 'bb_parser/tag_parser.rb'
 
 class Node
   def initialize (text, type, parent)

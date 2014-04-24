@@ -1,4 +1,4 @@
-require 'bb_code/tag_types.rb'
+require 'bb_parser/tag_types.rb'
 
 class TagParser
   

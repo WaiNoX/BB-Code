@@ -1,7 +1,7 @@
-require 'bb_code/tag_types.rb'  #tagdefinitionen
-require 'bb_code/tag_parser.rb' #tagparser
-require 'bb_code/node.rb'       #tree
-require 'bb_code/tag_handler.rb'#handler
+require 'bb_parser/tag_types.rb'  #tagdefinitionen
+require 'bb_parser/tag_parser.rb' #tagparser
+require 'bb_parser/node.rb'       #tree
+require 'bb_parser/tag_handler.rb'#handler
 require 'cgi'                   #escapen
 require 'pry'                   #debug
 

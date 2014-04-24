@@ -2,7 +2,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name = "BB-Code"
+  s.name = "bb_parser"
   s.version = '0.0.1'
   s.authors = ["Michael Steinle"]
   s.email = ["aelnle@gmail.com"]
