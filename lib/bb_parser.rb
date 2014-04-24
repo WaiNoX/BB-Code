@@ -2,6 +2,7 @@ require 'bb_parser/tag_types.rb'  #tagdefinitionen
 require 'bb_parser/tag_parser.rb' #tagparser
 require 'bb_parser/node.rb'       #tree
 require 'bb_parser/tag_handler.rb'#handler
+require 'rails_autolink'          #autolink
 require 'cgi'                   #escapen
 require 'pry'                   #debug
 
@@ -63,7 +64,8 @@ class BbParser
   
   def self.tree_to_html(node)
     if(node.get_type == :text) #returne den für html escapten string, texte haben keine unterknoten
-      return CGI.escapeHTML(node.get_text)
+      auto_link(text, :sanitize => false)
+      return  auto_link(CGI.escapeHTML(node.get_text))
     elsif (node.get_type == :master) #returne die erstellten texte aller unterknoten
       childtext = ''
       node.get_childs.each{|childnode|
