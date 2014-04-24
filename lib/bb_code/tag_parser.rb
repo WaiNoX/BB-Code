@@ -1,4 +1,4 @@
-require './tag_types.rb'
+require 'bb_code/tag_types.rb'
 
 class TagParser
   
@@ -49,7 +49,7 @@ class TagParser
       return false
     elsif(tag_info[:allows_all_tags])# überknoten erlaubt alles
       return true
-    elsif(tag_info[:allowed_tags].includes?(tag_name)) #überknoten erlaubt den tag
+    elsif(tag_info[:allowed_tags].include?(tag_name)) #überknoten erlaubt den tag
       return true
     else # überknoten erlaubt den tag nicht
       return false

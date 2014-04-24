@@ -45,7 +45,7 @@ class FontTag
   def self.parse_to_html(tag, childtext)
     if(tag.get_data.empty? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
-    elsif(tag.get_data[0]=~/\A([a-z]+\z/i) #der parameter muss eine schriftart sein
+    elsif(tag.get_data[0]=~/\A[a-z]+\z/i) #der parameter muss eine schriftart sein
       return '<font face="'+ tag.get_data[0] +'>'+ childtext + '</font>'
     else #eingabefehler: parameter war keine schriftart, gib das original aus
       return FailTag.parse_to_html(tag, childtext)

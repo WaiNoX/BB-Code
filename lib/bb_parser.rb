@@ -1,13 +1,22 @@
-require './tag_types.rb'
-require './tag_parser.rb'
-require './tag_handler.rb'
-require 'cgi'
-require 'pry'
+require 'bb_code/tag_types.rb'  #tagdefinitionen
+require 'bb_code/tag_parser.rb' #tagparser
+require 'bb_code/node.rb'       #tree
+require 'bb_code/tag_handler.rb'#handler
+require 'cgi'                   #escapen
 
-class BbParser
+
+module BbParser
   
   #@@regex_woltlab = /\[(?:\/(?:[a-z]+)|(?:[a-z]+)(?:=(?:\'[^\'\\]*(?:\\.[^\'\\]*)*\'|[^,\]]*)(?:,(?:\'[^\'\\]*(?:\\.[^\'\\]*)*\'|[^,\]]*))*)?)\]/ix
   @@regex = /(\[\/?[a-z*]+(?:=(?:(?:'[^"'\[]+')|(?:"[^"'\[]+")|(?:[^"'\[]+)))?\])/ix
+
+  def self.bb_to_html(text)
+    parse_tokens(text)
+    build_tree
+    return tree_to_html(@tree)
+  end
+  
+  private
   
   def self.parse_tokens(text)
     @@text_array = text.split(@@regex)
@@ -73,43 +82,9 @@ class BbParser
   end
 end
 
-class Node
-  def initialize (text, type, parent)
-    #puts text
-    @text = text
-    @type = type
-    @parent = parent
-    @childs = []
-    if(@type == :tag)
-      @tag = TagParser.new @text
-    end
-  end
-  
-  def add_child(node)
-    @childs.push(node)
-  end
-  
-  def get_childs
-    return @childs
-  end
-  
-  def get_type
-    return @type
-  end
-  
-  def get_parent
-    return @parent
-  end
-  
-  def get_text
-    return @text
-  end
-  
-  def get_tag
-    if @type == :tag
-      return @tag
-    else
-      return nil
-    end
+String.class_eval do
+  # Convert a string with BBCode markup into its corresponding HTML markup
+  def bbcode_to_html(text)
+    return BbParser.bb_to_html(text)
   end
 end

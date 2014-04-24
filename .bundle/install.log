@@ -1,0 +1,11 @@
+# Logfile created on 2014-04-22 17:21:11 +0200 by logger.rb/41954
+I, [2014-04-22T17:21:11.641891 #2806]  INFO -- : 0:  polyglot (0.3.4) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/polyglot-0.3.4.gemspec
+I, [2014-04-22T17:21:15.607404 #2806]  INFO -- : 0:  treetop (1.5.3) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/treetop-1.5.3.gemspec
+I, [2014-04-22T17:21:15.609086 #2806]  INFO -- : 0:  bundler (1.5.1) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/bundler-1.5.1.gemspec
+I, [2014-04-22T17:24:38.133759 #3036]  INFO -- : 0:  polyglot (0.3.4) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/polyglot-0.3.4.gemspec
+I, [2014-04-22T17:24:38.157256 #3036]  INFO -- : 0:  treetop (1.5.3) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/treetop-1.5.3.gemspec
+I, [2014-04-22T17:24:38.169865 #3036]  INFO -- : 0:  bundler (1.5.1) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/bundler-1.5.1.gemspec
+I, [2014-04-22T19:16:55.718365 #4517]  INFO -- : 0:  json (1.8.1) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/json-1.8.1.gemspec
+I, [2014-04-22T19:16:59.679228 #4517]  INFO -- : 0:  structured_warnings (0.1.4) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/structured_warnings-0.1.4.gemspec
+I, [2014-04-22T19:17:03.280193 #4517]  INFO -- : 0:  rubytree (0.9.3) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/rubytree-0.9.3.gemspec
+I, [2014-04-22T19:17:03.281039 #4517]  INFO -- : 0:  bundler (1.5.1) from /home/mist/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/specifications/bundler-1.5.1.gemspec

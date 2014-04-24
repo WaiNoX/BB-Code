@@ -1,3 +1,9 @@
+# 
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+ 
+
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
@@ -6,19 +12,24 @@ require 'rdoc/task'
 require 'rake/testtask'
 require 'rspec/core/rake_task'
 
-spec = Gem::Specification.new do |s|
-  s.name = 'BBCode'
+$:.push File.expand_path("../lib", __FILE__)
+
+# Describe your gem and declare its dependencies:
+Gem::Specification.new do |s|
+  s.name = "BB-Code"
   s.version = '0.0.1'
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README', 'LICENSE']
-  s.summary = 'Your summary here'
-  s.description = s.summary
-  s.author = ''
-  s.email = ''
-  # s.executables = ['your_executable_here']
-  s.files = %w(Rakefile) + Dir.glob("{bin,lib,spec}/**/*")
-  s.require_path = "lib"
-  s.bindir = "bin"
+  s.authors = ["Michael Steinle"]
+  s.email = ["aelnle@gmail.com"]
+  s.homepage = "https://github.com/WaiNoX/BB-Code"
+  s.summary = s.name + " " + s.version
+  s.description = "Convert BBCode to HTML."
+
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile", "Gemfile"]
+  s.test_files = Dir["test/**/*"]
+  
+  s.add_dependency 'activesupport'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'pry'
 end
 
 Gem::PackageTask.new(spec) do |p|
