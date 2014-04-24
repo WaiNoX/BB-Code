@@ -6,11 +6,10 @@ require 'cgi'                   #escapen
 require 'pry'                   #debug
 
 
-module BbParser
+class BbParser
   
   #@@regex_woltlab = /\[(?:\/(?:[a-z]+)|(?:[a-z]+)(?:=(?:\'[^\'\\]*(?:\\.[^\'\\]*)*\'|[^,\]]*)(?:,(?:\'[^\'\\]*(?:\\.[^\'\\]*)*\'|[^,\]]*))*)?)\]/ix
-  @@regex = /(\[\/?[a-z*]+(?:=(?:(?:'[^"'\[]+')|(?:"[^"'\[]+")|(?:[^"'\[]+)))?\])/ix
-
+  @@tokenizer = /(\[\/?[a-z*]+(?:=(?:(?:'[^"'\[]+')|(?:"[^"'\[]+")|(?:[^"'\[]+)))?\])/ix
   def self.bb_to_html(text)
     text_array = parse_tokens(text)
     tree = build_tree text_array
@@ -20,7 +19,7 @@ module BbParser
   private
   
   def self.parse_tokens(text)
-    text.split(@@regex)
+    text.split(@@tokenizer)
   end
   
   #Baut aus dem TokenArray einen Baum auf, der die regeln aus TagTypes befolgt
@@ -29,8 +28,8 @@ module BbParser
     parent_node = tree
     
     text_array.each { |item| 
-      if(item.index(@@regex) == 0) #ist ein Tag
-#        binding.pry
+      if(TagParser.is_tag(item))
+#        binding.pry # debug
         tag = TagParser.new item
         if(tag.closing? && parent_node.get_type == :master) #wenn kein offener tag mehr da -> text
           node = Node.new(item, :text, parent_node)
@@ -46,11 +45,11 @@ module BbParser
             node = Node.new(item, :tag, parent_node)
             parent_node.add_child(node)
             parent_node = node
-          else #falsch schließende tags oder unbekannte tags werden als text behandelt
+          else #ubekannte tags werden als text behandelt
             node = Node.new(item, :text, parent_node)
             parent_node.add_child(node)
           end
-        else #fehler!! was immer es ist wird als text behandelt, damit der anwender es sehen kann
+        else #eingabefehler, schließender tag passt nicht usw
           node = Node.new(item, :text, parent_node)
           parent_node.add_child(node)
         end
@@ -89,7 +88,7 @@ end
 
 String.class_eval do
   # Convert a string with BBCode markup into its corresponding HTML markup
-  def bbcode_to_html(text)
-    return BbParser.bb_to_html(text)
+  def bbcode_to_html
+    return BbParser.bb_to_html(self)
   end
 end

@@ -2,25 +2,32 @@ require 'bb_code/tag_types.rb'
 
 class TagParser
   
+  # 0: Alles
+  # 1: ""->öfnend, "/"->schließend
+  # 2: tag name
+  # 3: 'parameter'
+  # 4: "parameter"
+  # 5: parameter
+  
+  @@matcher = /\A\[(\/?)([a-z*]+)(?:=(?:(?:'([^"'\[]+)')|(?:"([^"'\[]+)")|(?:([^"'\[]+))))?\]\z/ix
+    
   def self.is_valid_name(tag_name)
     tag_symbol = tag_name.to_sym
     return !(TagTypes.get_info(tag_symbol).nil?)
   end
   
-  def initialize(tag)
-    @original = tag
-    @closing = tag[1] == "/"
-    index = tag.index("=")
-    if index.nil?
-      index = tag.index(']')
-    end
-    @tag_name = tag[(@closing?2:1)..(index-1)]
-    if(not tag.index("=").nil?)
-      @tag_data = tag[(tag.index("=")+1)..(tag.index("]")-1)].gsub(/['"']/, "").split(",")
-    else
-      @tag_data = []
-    end
+  def self.is_tag(tag)
+    return !tag.match(@@matcher).nil?
   end
+  
+  def initialize(tag)
+    data = tag.match(@@matcher)
+    @original = tag
+    @closing = data[1] == '/'
+    @tag_name = data[2]
+    @tag_data = data[5] || data[4] || data[3]
+  end
+
   
   def closing?
     return @closing

@@ -3,4 +3,3 @@ require 'bb_parser'
 BbParser.bb_to_html '[table][tr][td]hi[/td][/tr][/table][/li]'
 tokens = BbParser.parse_tokens '[table][tr][td]hi[/td][/tr][/table][/li]'
 tree = BbParser.build_tree tokens
-
