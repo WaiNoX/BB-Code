@@ -33,7 +33,7 @@ class ColorTag
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
     elsif(tag.get_data=~/\A([a-z]+|[0-9a-f]{6})\z/i) #der parameter muss eine farbe sein
-      return '<font color="'+ tag.get_data() +'>'+ childtext + '</font>'
+      return '<font color="'+ tag.get_data() +'">'+ childtext + '</font>'
     else #eingabefehler: parameter war keine farbe, gib das original aus
       eturn FailTag.parse_to_html(tag, childtext)
     end
@@ -59,7 +59,7 @@ class AlignTag
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
     elsif(tag.get_data=~/\A(center|left|right|justify)\z/i) #der parameter muss eine ausrichtig sein 
-      return '<div style="text-align:'+ tag.get_data() +';">'+ childtext + '</font>'
+      return '<div style="text-align:'+ tag.get_data() +';">'+ childtext + '</div>'
     else #eingabefehler: parameter war keine schriftart, gib das original aus
       return FailTag.parse_to_html(tag, childtext)
     end
