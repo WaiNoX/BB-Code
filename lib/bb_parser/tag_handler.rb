@@ -125,3 +125,15 @@ class TableTag
     return '<table border="1">' + childtext + '</table>'
   end
 end
+
+class SizeTag
+  def self.parse_to_html(tag, childtext)
+    if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
+      return FailTag.parse_to_html(tag, childtext)
+    elsif(tag.get_data=~/\A[0-9]+\z/i) #der parameter muss eine größe sein
+      return '<font size="'+ tag.get_data() +'">'+ childtext + '</font>'
+    else #eingabefehler: parameter war keine farbe, gib das original aus
+      return FailTag.parse_to_html(tag, childtext)
+    end
+  end
+end

@@ -108,6 +108,12 @@ class TagTypes
       :allows_all_tags => true,
       :allowed_tags => [],
       :handler => 'SimpleTag'
+    },
+    :size => {
+      :name => 'size',
+      :allows_all_tags => true,
+      :allowed_tags => [],
+      :handler => 'SizeTag'
     }#,
 #    :spoiler => {
 #      :name => 'spoiler',
