@@ -56,7 +56,7 @@ class BbParser
           parent_node.add_child(node)
         end
       elsif(TagParser.is_url(item)) #autourl darf nicht einfach nen url tag ausspucken, da es eventuell in einem img/url tag benutzt wird
-        if((!parent_node.get_tag.nil?) && parent_node.get_tag.allows?('url')) # wenn parent_tag erlaubt baue einen url tag zum anhängen
+        if( parent_node.get_type == :master  || (!parent_node.get_tag.nil? && parent_node.get_tag.allows?('url'))) # wenn parent_tag erlaubt baue einen url tag zum anhängen
           url = '<a href="' + item + '">' + item + '</a>'
           node = Node.new(url, :url, parent_node)
           parent_node.add_child(node)
@@ -64,7 +64,6 @@ class BbParser
           node = Node.new(item, :text, parent_node)
           parent_node.add_child(node)
         end
-        
       else #text
         node = Node.new(item, :text, parent_node)
         parent_node.add_child(node)
