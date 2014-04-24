@@ -57,9 +57,13 @@ class BbParser
         end
       elsif(TagParser.is_url(item)) #autourl darf nicht einfach nen url tag ausspucken, da es eventuell in einem img/url tag benutzt wird
         if( parent_node.get_type == :master  || (!parent_node.get_tag.nil? && parent_node.get_tag.allows?('url'))) # wenn parent_tag erlaubt baue einen url tag zum anhängen
-          url = '<a href="' + item + '">' + item + '</a>'
-          node = Node.new(url, :url, parent_node)
-          parent_node.add_child(node)
+          url_tag = Node.new('[url]', :tag, parent_node) #node für den url_tag erstellen
+          url = Node.new(item, :text, url_tag) #node für den text erstellen
+          url_tag.add_child(url) #text in tag einhängen
+          parent_node.add_child(url_tag) #das ganze an den paren hängen
+#          url = '<a href="' + item + '">' + item + '</a>' # das darf leider kein richtiger tag sein, da sonnst der schließende fehlen würde, wobei sich das auc machen ließe
+#          node = Node.new(url, :url, parent_node)
+#          parent_node.add_child(node)
         else #anernfalls ist es nur text
           node = Node.new(item, :text, parent_node)
           parent_node.add_child(node)
@@ -75,8 +79,8 @@ class BbParser
   def self.tree_to_html(node)
     if(node.get_type == :text) #returne den für html escapten string, texte haben keine unterknoten
       return  CGI.escapeHTML(node.get_text)
-    elsif(node.get_type == :url) #returne den unescapten string, url haben keine unterknoten
-      return node.get_text
+#    elsif(node.get_type == :url) #returne den unescapten string, url haben keine unterknoten
+#      return node.get_text
     elsif (node.get_type == :master) #returne die erstellten texte aller unterknoten
       childtext = ''
       node.get_childs.each{|childnode|
