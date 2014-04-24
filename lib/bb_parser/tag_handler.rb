@@ -9,7 +9,7 @@ class SimpleTag
   end
 end
 
-#der parser für fehlerhafte tags zeigt den original tag an
+#der parser für fehlerhafte tags zeigt den original start-tag an
 class FailTag
   def self.parse_to_html(tag, childtext)
     return CGI.escapeHTML(tag.original) + childtext + '[/' + tag.name + ']'
@@ -33,7 +33,7 @@ class ColorTag
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
     elsif(tag.get_data=~/\A([a-z]+|\#[0-9a-f]{6})\z/i) #der parameter muss eine farbe sein
-      return '<font color="'+ tag.get_data() +'">'+ childtext + '</font>'
+      return '<span style="color:'+ tag.get_data() +'">'+ childtext + '</span>' #<span style="color:#FF0000">blaa</span>
     else #eingabefehler: parameter war keine farbe, gib das original aus
       return FailTag.parse_to_html(tag, childtext)
     end
@@ -46,7 +46,7 @@ class FontTag
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
     elsif(tag.get_data=~/\A[a-z]+\z/i) #der parameter muss eine schriftart sein
-      return '<font face="'+ tag.get_data() +'>'+ childtext + '</font>'
+      return '<span style="font-family:'+ tag.get_data() +'">'+ childtext + '</span>' #<span style="font-family:Avalon,Wide Latin"></span>
     else #eingabefehler: parameter war keine schriftart, gib das original aus
       return FailTag.parse_to_html(tag, childtext)
     end
@@ -131,7 +131,7 @@ class SizeTag
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
     elsif(tag.get_data=~/\A[0-9]+\z/i) #der parameter muss eine größe sein
-      return '<font size="'+ tag.get_data() +'">'+ childtext + '</font>'
+      return '<span style="font-size:"'+ tag.get_data() +'px;">'+ childtext + '</span>' #<span style="font-size:22px;">blaa</span>
     else #eingabefehler: parameter war keine farbe, gib das original aus
       return FailTag.parse_to_html(tag, childtext)
     end
