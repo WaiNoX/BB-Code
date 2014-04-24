@@ -32,10 +32,10 @@ class ColorTag
   def self.parse_to_html(tag, childtext)
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
-    elsif(tag.get_data=~/\A(#[a-z]+|[0-9a-f]{6})\z/i) #der parameter muss eine farbe sein
+    elsif(tag.get_data=~/\A(\#[a-z]+|[0-9a-f]{6})\z/i) #der parameter muss eine farbe sein
       return '<font color="'+ tag.get_data() +'">'+ childtext + '</font>'
     else #eingabefehler: parameter war keine farbe, gib das original aus
-      eturn FailTag.parse_to_html(tag, childtext)
+      return FailTag.parse_to_html(tag, childtext)
     end
   end
 end
