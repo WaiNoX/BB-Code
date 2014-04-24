@@ -11,6 +11,8 @@ class BbParser
   
   #@@regex_woltlab = /\[(?:\/(?:[a-z]+)|(?:[a-z]+)(?:=(?:\'[^\'\\]*(?:\\.[^\'\\]*)*\'|[^,\]]*)(?:,(?:\'[^\'\\]*(?:\\.[^\'\\]*)*\'|[^,\]]*))*)?)\]/ix
   @@tokenizer = /(\[\/?[a-z*]+(?:=(?:(?:'[^"'\[]+')|(?:"[^"'\[]+")|(?:[^"'\[]+)))?\])/ix
+  @@url = /(?:\A|\s)((?:[a-z]+:\/\/|www.)[^<\s]+\.[^<\s]+)/ix
+  
   def self.bb_to_html(text)
     text_array = parse_tokens(text)
     tree = build_tree text_array
@@ -64,7 +66,7 @@ class BbParser
   
   def self.tree_to_html(node)
     if(node.get_type == :text) #returne den für html escapten string, texte haben keine unterknoten
-      return  auto_link(CGI.escapeHTML(node.get_text))
+      return  CGI.escapeHTML(node.get_text).gsub(@@url, '<a href="\1">\1</a>')
     elsif (node.get_type == :master) #returne die erstellten texte aller unterknoten
       childtext = ''
       node.get_childs.each{|childnode|

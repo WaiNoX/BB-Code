@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
   
   s.add_dependency 'activesupport'
-  s.add_dependency 'rails_autolink'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'pry'
 end
