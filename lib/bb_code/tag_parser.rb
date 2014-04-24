@@ -43,15 +43,14 @@ class TagParser
   end
   
   def allows?(tag_name)
-    tag_symbol = tag_name.to_sym
-    tag_info = TagTypes.get_info(tag_symbol)
+    tag_info = TagTypes.get_info(@tag_name)
     if(tag_info.nil?) #kein handler da
       return false
-    elsif(tag_info[:allows_all_tags])# überknoten erlaubt alles
+    elsif(tag_info[:allows_all_tags])# ich erlaube alles
       return true
-    elsif(tag_info[:allowed_tags].include?(tag_name)) #überknoten erlaubt den tag
+    elsif(tag_info[:allowed_tags].include?(tag_name.downcase)) #ich erlaube den tag
       return true
-    else # überknoten erlaubt den tag nicht
+    else # ich erlaube den tag nicht
       return false
     end
   end

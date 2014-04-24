@@ -3,6 +3,7 @@ require 'bb_code/tag_parser.rb' #tagparser
 require 'bb_code/node.rb'       #tree
 require 'bb_code/tag_handler.rb'#handler
 require 'cgi'                   #escapen
+require 'pry'                   #debug
 
 
 module BbParser
@@ -11,26 +12,30 @@ module BbParser
   @@regex = /(\[\/?[a-z*]+(?:=(?:(?:'[^"'\[]+')|(?:"[^"'\[]+")|(?:[^"'\[]+)))?\])/ix
 
   def self.bb_to_html(text)
-    parse_tokens(text)
-    build_tree
-    return tree_to_html(@tree)
+    text_array = parse_tokens(text)
+    tree = build_tree text_array
+    return tree_to_html(tree)
   end
   
   private
   
   def self.parse_tokens(text)
-    @@text_array = text.split(@@regex)
+    text.split(@@regex)
   end
   
   #Baut aus dem TokenArray einen Baum auf, der die regeln aus TagTypes befolgt
-  def self.build_tree
-    @@tree = Node.new('', :master, nil)
-    parent_node = @@tree
+  def self.build_tree(text_array)
+    tree = Node.new('', :master, nil)
+    parent_node = tree
     
-    @@text_array.each { |item| 
+    text_array.each { |item| 
       if(item.index(@@regex) == 0) #ist ein Tag
+#        binding.pry
         tag = TagParser.new item
-        if(tag.closing? && parent_node.get_tag.name == tag.name) #wenn der schließende tag passt eine ebene nach oben
+        if(tag.closing? && parent_node.get_type == :master) #wenn kein offener tag mehr da -> text
+          node = Node.new(item, :text, parent_node)
+          parent_node.add_child(node)
+        elsif(tag.closing? && parent_node.get_tag.name == tag.name) #wenn der schließende tag passt eine ebene nach oben
           parent_node = parent_node.get_parent
         elsif((not tag.closing?)) #wenn sich ein neuer gültiger tag öffnet hinzufügen und runter
           if (parent_node.get_type == :master && TagParser.is_valid_name(tag.tag_name)) #ein tag ist gültig wenn er in @@tags steht und in :master eingehängt werden soll
@@ -54,7 +59,7 @@ module BbParser
         parent_node.add_child(node)
       end
     }
-    return @@tree
+    return tree
   end
   
   def self.tree_to_html(node)
