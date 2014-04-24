@@ -50,12 +50,17 @@ class TagParser
   end
   
   def allows?(tag_name)
-    tag_info = TagTypes.get_info(@tag_name)
-    if(tag_info.nil?) #kein handler da
+    this_info = TagTypes.get_info(@tag_name)
+    that_info = TagTypes.get_info(tag_name)
+    if(this_info.nil? || that_info.nil?) #keine handler da
       return false
-    elsif(tag_info[:allows_all_tags])# ich erlaube alles
+    elsif(this_info[:allows_all_tags] && that_info[:allowed_in_all])# ich erlaube alles und es erlaubt auch alles
       return true
-    elsif(tag_info[:allowed_tags].include?(tag_name.downcase)) #ich erlaube den tag
+    elsif(this_info[:allows_all_tags] && that_info[:allowed_in].include?(@tag_name)) #ich erlaube alles und es will zu mir
+      return true
+    elsif(that_info[:allowed_in_all] && this_info[:allowed_tags].include?(tag_name)) # es darf überall hin und ich erlaube es
+      return true
+    elsif(that_info[:allowed_in].include?(@tag_name) && this_info[:allowed_tags].include?(tag_name)) #ich erlaube es und es will zu mir
       return true
     else # ich erlaube den tag nicht
       return false
