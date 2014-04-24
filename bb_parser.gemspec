@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.authors = ["Michael Steinle"]
   s.email = ["aelnle@gmail.com"]
   s.homepage = "https://github.com/WaiNoX/BB-Code"
-  s.summary = s.name + " " + s.version
+  s.summary = "bb_parser version 0.0.1"
   s.description = "Convert BBCode to HTML."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile", "Gemfile"]
