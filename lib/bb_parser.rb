@@ -67,7 +67,7 @@ class BbParser
     elsif (node.get_type == :master) #returne die erstellten texte aller unterknoten
       childtext = ''
       node.get_childs.each{|childnode|
-        childtext= childtext + tree_to_html(childnode)
+        childtext = childtext + tree_to_html(childnode)
       }
       return childtext
     elsif (node.get_type == :tag) #returne das ergebniss der Tag-Klasse angewendet auf dne starttag und die texte der unterknoten

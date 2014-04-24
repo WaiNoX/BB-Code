@@ -3,3 +3,8 @@ require 'bb_parser'
 BbParser.bb_to_html '[table][tr][td]hi[/td][/tr][/table][/li]'
 tokens = BbParser.parse_tokens '[table][tr][td]hi[/td][/tr][/table][/li]'
 tree = BbParser.build_tree tokens
+
+#<Node:0x007f1a62083508 @text="", @type=:master, @parent=nil, @childs=[
+  #<Node:0x007f1a620833f0 @text="", @type=:text, @parent=#<Node:0x007f1a62083508 ...>, @childs=[]>, 
+  #<Node:0x007f1a62082ef0 @text="[img=http://www.wainox.de/wcf/images/avatars/avatar-476.png]", @type=:tag, @parent=#<Node:0x007f1a62083508 ...>, @childs=[], @tag=#<TagParser:0x007f1a62082e78 @original="[img=http://www.wainox.de/wcf/images/avatars/avatar-476.png]", @closing=false, @tag_name="img", @tag_data="http://www.wainox.de/wcf/images/avatars/avatar-476.png">>
+]>

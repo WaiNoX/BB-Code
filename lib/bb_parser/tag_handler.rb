@@ -89,6 +89,8 @@ class ImgTag
       '<img src="'+URI.escape(childtext)+'" width="'+width+'" height="'+height+'" alt="'+CGI.escapeHTML(childtext)+'">'
     elsif(tag.get_data=~/\A[0-9]+%\z/) # größenangabe in prozent
       '<img src="'+URI.escape(childtext)+'" width="'+tag.get_data() +'" height="'+ tag.get_data() +'" alt="'+CGI.escapeHTML(childtext)+'">'
+    else
+      return FailTag.parse_to_html(tag, childtext)
     end
   end
 end
