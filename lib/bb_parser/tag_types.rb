@@ -19,6 +19,12 @@ class TagTypes
       :allowed_tags => [],
       :handler => 'SimpleTag'
     },
+    :s => {
+      :name => 's',
+      :allows_all_tags => true,
+      :allowed_tags => [],
+      :handler => 'SimpleTag'
+    },
     :sub => {
       :name => 'sub',
       :allows_all_tags => true,
@@ -124,6 +130,6 @@ class TagTypes
   }
   
   def self.get_info(tag)
-    return @@tags[tag.to_sym]
+    return @@tags[tag.to_sym.downcase]
   end
 end
