@@ -131,7 +131,7 @@ class SizeTag
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
     elsif(tag.get_data=~/\A[0-9]+\z/i) #der parameter muss eine größe sein
-      return '<span style="font-size:"'+ tag.get_data() +'px;">'+ childtext + '</span>' #<span style="font-size:22px;">blaa</span>
+      return '<span style="font-size:'+ tag.get_data() +'px">'+ childtext + '</span>' #<span style="font-size:22px;">blaa</span>
     else #eingabefehler: parameter war keine farbe, gib das original aus
       return FailTag.parse_to_html(tag, childtext)
     end
