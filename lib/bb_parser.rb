@@ -64,7 +64,6 @@ class BbParser
   
   def self.tree_to_html(node)
     if(node.get_type == :text) #returne den für html escapten string, texte haben keine unterknoten
-      auto_link(text, :sanitize => false)
       return  auto_link(CGI.escapeHTML(node.get_text))
     elsif (node.get_type == :master) #returne die erstellten texte aller unterknoten
       childtext = ''
