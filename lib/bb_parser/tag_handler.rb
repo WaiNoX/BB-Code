@@ -20,9 +20,9 @@ end
 class MailTag
   def self.parse_to_html(tag, childtext)
     if(tag.get_data.nil?) # childtext ist emailadresse
-      return '<a href=mailto:"' + URI.escape(childtext) + '">' + CGI.escapeHTML(childtext) + '</a>'
+      return '<a href="mailto:' + URI.escape(childtext) + '">' + CGI.escapeHTML(childtext) + '</a>'
     else # tag hat die email als parameter
-      return '<a href=mailto:"' + URI.escape(tag.get_data) + '">' + CGI.escapeHTML(childtext) + '</a>'
+      return '<a href="mailto:' + URI.escape(tag.get_data) + '">' + CGI.escapeHTML(childtext) + '</a>'
     end
   end
 end
@@ -59,7 +59,7 @@ class AlignTag
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter
       return FailTag.parse_to_html(tag, childtext)
     elsif(tag.get_data=~/\A(center|left|right|justify)\z/i) #der parameter muss eine ausrichtig sein 
-      return '<div style="text-align:'+ tag.get_data() +';">'+ childtext + '</div>'
+      return '<div style="text-align:'+ tag.get_data() +'">'+ childtext + '</div>'
     else #eingabefehler: parameter war keine schriftart, gib das original aus
       return FailTag.parse_to_html(tag, childtext)
     end
@@ -106,7 +106,6 @@ class UrlTag
   end
 end
 
-
 #parser für dem list-tag
 class ListTag
   def self.parse_to_html(tag, childtext)
@@ -114,18 +113,20 @@ class ListTag
       return '<ul>' + childtext + '</ul>'
     elsif(tag.get_data() == '1') #geordnete liste
       return '<ol>' + childtext + '</ol>'
-    else # aufzählungstyp wird nicht unterstützt, zeige geordnete liste an # das könnte man eventuell erweitern
-      return '<ol>' + childtext + '</ol>'
+    else # aufzählungstyp wird nicht unterstützt
+      return FailTag.parse_to_html(tag, childtext)
     end
   end
 end
 
+#parser für table-tags
 class TableTag
   def self.parse_to_html(tag, childtext)
     return '<table border="1">' + childtext + '</table>'
   end
 end
 
+#parser für size-tag
 class SizeTag
   def self.parse_to_html(tag, childtext)
     if(tag.get_data.nil? ) # eingabefehler, dieser tag erwartet einen parameter

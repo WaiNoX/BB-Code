@@ -9,7 +9,7 @@ class TagParser
   # 4: "parameter"
   # 5: parameter
   
-  @@tag_matcher = /\A\[(\/?)([a-z*]+)(?:=(?:(?:'([^"'\[]+)')|(?:"([^"'\[]+)")|(?:([^"'\[]+))))?\]\z/ix
+  @@tag_matcher = /\A\[(\/?)([a-z*]+)(?:=(?:(?:'([^"'\[<]+)')|(?:"([^"'\[<]+)")|(?:([^"'\[<]+))))?\]\z/ix
   @@url_matcher = /\A((?:[a-z]+:\/\/|www.)[^<\s]+\.[^<\s]+)\z/ix
     
   def self.is_valid_name(tag_name)
@@ -32,6 +32,9 @@ class TagParser
   
   def initialize(tag)
     data = tag.match(@@tag_matcher)
+    if(data.nil?)
+      return
+    end
     @original = tag
     @closing = data[1] == '/'
     @tag_name = data[2]
@@ -60,6 +63,9 @@ class TagParser
   end
   
   def allows?(tag_name)
+    if(closing?) # wenn tag schließt auch keine unterknoten erlauben
+      return false
+    end
     this_info = TagTypes.get_info(@tag_name)
     that_info = TagTypes.get_info(tag_name)
     if(this_info.nil? || that_info.nil?) #keine handler da
